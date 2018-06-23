@@ -10,3 +10,9 @@ include/linux/syscalls.h
 199#define SYSCALL_DEFINE4(name, ...) SYSCALL_DEFINEx(4, _##name, __VA_ARGS__)
 200#define SYSCALL_DEFINE5(name, ...) SYSCALL_DEFINEx(5, _##name, __VA_ARGS__)
 201#define SYSCALL_DEFINE6(name, ...) SYSCALL_DEFINEx(6, _##name, __VA_ARGS__)
+open.c        SYSCALL_DEFINE3(open, const char __user *, filename, int, flags, umode_t, mode) in SYSCALL_DEFINE3() function 
+read_write.c  SYSCALL_DEFINE3(lseek, unsigned int, fd, off_t, offset, unsigned int, whence) in SYSCALL_DEFINE3() function 
+              SYSCALL_DEFINE3(read, unsigned int, fd, char __user *, buf, size_t, count) in SYSCALL_DEFINE3() function 
+              SYSCALL_DEFINE3(write, unsigned int, fd, const char __user *, buf, in SYSCALL_DEFINE3() function 
+              SYSCALL_DEFINE3(readv, unsigned long, fd, const struct iovec __user *, vec, in SYSCALL_DEFINE3() function 
+              SYSCALL_DEFINE3(writev, unsigned long, fd, const struct iovec __user *, vec, in SYSCALL_DEFINE3() function 
