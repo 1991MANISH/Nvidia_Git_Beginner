@@ -16,3 +16,71 @@ read_write.c  SYSCALL_DEFINE3(lseek, unsigned int, fd, off_t, offset, unsigned i
               SYSCALL_DEFINE3(write, unsigned int, fd, const char __user *, buf, in SYSCALL_DEFINE3() function 
               SYSCALL_DEFINE3(readv, unsigned long, fd, const struct iovec __user *, vec, in SYSCALL_DEFINE3() function 
               SYSCALL_DEFINE3(writev, unsigned long, fd, const struct iovec __user *, vec, in SYSCALL_DEFINE3() function 
+
+df command - Shows the amount of disk space used and available on Linux file systems.
+du command - Display the amount of disk space used by the specified files and for each subdirectory.
+btrfs fi df /device/ - Show disk space usage information for a btrfs based mount point/file system
+
+system-udevd --> This user space daemon creates the device node at runtime when a device is dected based on some rules define.
+
+kmap --> returns virtual address to a physical address. If kernel maps high physical memory to its page table(kernel address space if there is lackness of memory) then virtual address to that is return.
+         For eg. kernel needs large contigous memory not available is kernel address space now this memory can be allocated from high mem region. creating a virtual address for this memory and insertig that entry in 
+         kernel page table. check following call flow for this -->   kmap --> kmap_high --> map_new_virtaul 
+         For example if we are having data present in high mem and needs to process in kernel then we usually call kmap API. for example in case of DMA.
+         To support dma_buf objects residing in highmem cpu access is page-based using an api similar to kmap.
+         To operate on user space buffer either we have to copy complete buffer in kernel space and then operate on it or we can map that in kernel address space and then we can operate on it using kmap API.         
+mmap--> mmap map the file in process virtual address space. This API completely maps the file of size s in virtual address spce. Where virtual address represents the base address of the file.
+        The mmap() function allows access to resources via address space manipulations, instead of read()/ write(). Once a file is mapped, all a process has to do to access it is use the data at the address to which the file was mapped.
+        read memory mapped file for this further.
+ZONE_HIGHMEM --> * A memory area that is only addressable by the kernel through  mapping portions into its own address space. This is for example  used by i386 to allow the kernel to address the memory beyond  900MB. The kernel will set up special
+                   mappings (page table entries on i386) for each page that the kernel needs to access. and this mapping would be done from 128MB reserved area.
+                   
+vmalloc  --> vmalloc malloc memory from this 128 MB reserved area. ioremap API also uses 128 MB area for mapping h/w register in virtual address space.
+CMA
+copy_to_user adnd copy_from_user
+                       Symbol                   VADDR       Size
+ +------------------+
+ | Userspace        |                           0x00000000  TASK_SIZE
+ +------------------+                           0x40000000
+ +------------------+
+ | Page table       |                           0x80000000
+ +------------------+                           0x80400000
+ +------------------+
+ | KMAP area        |  PKMAP_BASE                           PTRS_PER_PTE *
+ |                  |                                       DCACHE_N_COLORS *
+ |                  |                                       PAGE_SIZE
+ |                  |                                       (4MB * DCACHE_N_COLORS)
+ +------------------+
+ | Atomic KMAP area |  FIXADDR_START                        KM_TYPE_NR *
+ |                  |                                       NR_CPUS *
+ |                  |                                       DCACHE_N_COLORS *
+ |                  |                                       PAGE_SIZE
+ +------------------+  FIXADDR_TOP              0xbffff000
+ +------------------+    VMALLOC_START            0xc0000000  128MB - 64KB
+ | VMALLOC area     |
+ +------------------+  VMALLOC_END
+ | Cache aliasing   |  TLBTEMP_BASE_1           0xc7ff0000  DCACHE_WAY_SIZE
+ | remap area 1     |
+ +------------------+
+ | Cache aliasing   |  TLBTEMP_BASE_2                       DCACHE_WAY_SIZE
+ | remap area 2     |
+ +------------------+
+ +------------------+
+ | Cached KSEG      |  XCHAL_KSEG_CACHED_VADDR  0xd0000000  128MB
+ +------------------+
+ | Uncached KSEG    |  XCHAL_KSEG_BYPASS_VADDR  0xd8000000  128MB
+ +------------------+
+ | Cached KIO       |  XCHAL_KIO_CACHED_VADDR   0xe0000000  256MB
+ +------------------+
+ | Uncached KIO     |  XCHAL_KIO_BYPASS_VADDR   0xf0000000  256MB
+
+
+disk mounting that we have done today make a note of that
+
+--> Attach the hard disk to cabinet using SATA and power cable.
+--> restart your pc. and do lsblk command . This will show you a new attached device.
+--> now install gparted using sudo apt-get install gparted tool.
+--> Now open tool now this tool is going to show you attached device. Now create a partition on this  hardisk.
+--> After creating parition now run blkid /dev/sda . This is going to give you UUID parameter.
+--> Now make entry for this parition in etc/fstab file.
+--> Now mount this hardisk at any location using sudo command.
