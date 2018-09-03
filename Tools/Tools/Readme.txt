@@ -6,6 +6,8 @@ Tools That I may needs to setup in future.
 --> git  1991MANISH/Manish123#
 --> cscope
 
+cscope -Rp4   --> This will show file name also with search result
+
 Ctrl+] - go to definition
 Ctrl+T - Jump back from the definition.
 Ctrl+W Ctrl+] - Open the definition in a horizontal split
