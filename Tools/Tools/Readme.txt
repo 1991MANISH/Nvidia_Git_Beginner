@@ -1,10 +1,10 @@
 Tools That I may needs to setup in future.
 
 --> Opengrok on Linux or Windows Machine.
---> tmux 
+--> tmux / byohu
 --> vim with ctags and taglists.
 --> git  1991MANISH/Manish123#
---> cscope
+--> cscope/ctags
 
 cscope -Rp4   --> This will show file name also with search result
 
